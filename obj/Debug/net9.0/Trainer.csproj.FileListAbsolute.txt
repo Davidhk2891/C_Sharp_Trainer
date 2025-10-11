@@ -1,0 +1,14 @@
+/Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/bin/Debug/net9.0/Trainer
+/Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/bin/Debug/net9.0/Trainer.deps.json
+/Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/bin/Debug/net9.0/Trainer.runtimeconfig.json
+/Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/bin/Debug/net9.0/Trainer.dll
+/Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/bin/Debug/net9.0/Trainer.pdb
+/Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/obj/Debug/net9.0/Trainer.GeneratedMSBuildEditorConfig.editorconfig
+/Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/obj/Debug/net9.0/Trainer.AssemblyInfoInputs.cache
+/Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/obj/Debug/net9.0/Trainer.AssemblyInfo.cs
+/Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/obj/Debug/net9.0/Trainer.csproj.CoreCompileInputs.cache
+/Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/obj/Debug/net9.0/Trainer.dll
+/Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/obj/Debug/net9.0/refint/Trainer.dll
+/Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/obj/Debug/net9.0/Trainer.pdb
+/Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/obj/Debug/net9.0/Trainer.genruntimeconfig.cache
+/Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/obj/Debug/net9.0/ref/Trainer.dll
