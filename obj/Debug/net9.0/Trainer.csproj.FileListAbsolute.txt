@@ -12,3 +12,4 @@
 /Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/obj/Debug/net9.0/Trainer.pdb
 /Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/obj/Debug/net9.0/Trainer.genruntimeconfig.cache
 /Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/obj/Debug/net9.0/ref/Trainer.dll
+/Users/davidrajchenberg/Desktop/Vamoaua Games/Practice/Trainer/obj/Debug/net9.0/Trainer.sourcelink.json
