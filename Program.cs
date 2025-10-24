@@ -1,7 +1,7 @@
 ﻿// Run program
 
 // Exercise program
-Cg10Exercise2.Run();
+Cg11Exercise1.Run();
 
 // Small console app
-// ScoreCalculatorV2.RunApp();
+// CoinFlipper.RunApp();
