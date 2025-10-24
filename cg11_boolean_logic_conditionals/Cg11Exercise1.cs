@@ -22,14 +22,17 @@ public class Cg11Exercise1
     public static void Run()
     {
 
-        Console.WriteLine("Please enter password");
+        Console.WriteLine("Enter password");
         string? password = Console.ReadLine();
-        bool accessGranted = password == "opensesame";
-        bool emptyPassword = password == "";
 
-        if (accessGranted)
+        bool accessGranted = password == "opensesame";
+        bool emptyPassword = string.IsNullOrEmpty(password);
+
+        if (emptyPassword)
+            Console.WriteLine("You must enter a password");
+        else if (accessGranted)
             Console.WriteLine("Access granted. Welcome, adventurer");
-        else if (emptyPassword)
+        else
             Console.WriteLine("Access denied");
     }
 }
