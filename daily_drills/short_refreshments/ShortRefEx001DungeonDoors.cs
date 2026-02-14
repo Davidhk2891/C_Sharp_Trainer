@@ -55,7 +55,39 @@ public class ShortRefEx001DungeonDoors
             Console.WriteLine("Open the next door? y/n");
             doorAction = Console.ReadLine();
 
-            Console.WriteLine("You choose to open the next door!");
+            if (doorAction == "y")
+            {
+                Console.WriteLine("You choose to open the next door!");
+                int roomOutcome = rand.Next(0, 1);
+                if (roomOutcome == 0)
+                {
+                    Console.WriteLine("You collected. +5 gold");
+                    playerGold += 5;
+                } 
+                else
+                {
+                    Console.WriteLine("You lose -3 HP");
+                    playerLife -= 3;
+                }
+
+                // Check player HP
+                if (playerLife <= 0)
+                {
+                    playerDied = true;
+                    if (playerLife < 0) playerLife = 0;
+                    Console.WriteLine($"Your HP: {playerLife}\nYou died :(");
+                }
+                else
+                {
+                    Console.WriteLine($"Your HP: {playerLife}");   
+                }
+                Console.WriteLine($"Gold collected: {playerGold}");
+            }
+            else
+            {
+                Console.WriteLine("You choose not to open the next door.");
+                Console.WriteLine("Good bye");
+            }
         }
 
         /*
