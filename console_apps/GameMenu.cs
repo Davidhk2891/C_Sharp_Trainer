@@ -34,9 +34,6 @@ Requirements:
     5. Bonus challenge
     Add a short "Press any key to return..." pause after Codex or New Game options. Optional but makes it feel more game-y
 */
-using System.Diagnostics;
-using System.Reflection;
-
 public class GameMenu
 {
     public static void RunApp()
@@ -48,7 +45,7 @@ public class GameMenu
         Console.WriteLine("---------------------");
 
         string? menuInput = Console.ReadLine()?.Trim();
-    
+
         switch (menuInput){
             case "1":
                 Console.WriteLine("Starting new game...");

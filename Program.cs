@@ -1,7 +1,7 @@
 ﻿// Run program
 
 // Exercise program
-// Cg12Exercise2.Run();
+// Cg14Exercise3.Run();
 
 // Small console app
-GameMenu.RunApp();
+ShortRefEx001DungeonDoors.RunApp();

@@ -22,7 +22,7 @@ public class Cg11Exercise2
     {
         Console.WriteLine("Enter password: ");
         string? password = Console.ReadLine();
-        string? fixedPassword = password.ToLower().Trim();
+        string? fixedPassword = password?.ToLower().Trim();
 
         bool correctCode = fixedPassword == "galaxy42";
         bool emptyCode = string.IsNullOrEmpty(fixedPassword);

@@ -19,7 +19,7 @@ public class Cg12Exercise1
         Console.WriteLine("1 - Start new game\n2 - Load game\n3 - Quit game");
         string? cleanedInput = "";
         string? input = Console.ReadLine();
-        cleanedInput= input.ToLower().Trim();
+        cleanedInput= input?.ToLower().Trim();
 
         switch (cleanedInput)
         {
