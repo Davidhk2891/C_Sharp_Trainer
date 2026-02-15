@@ -4,4 +4,4 @@
 // Cg14Exercise3.Run();
 
 // Small console app
-ShortRefEx001DungeonDoors.RunApp();
+ShortRefEx002ArenaDiceDuel.RunApp();
