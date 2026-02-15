@@ -64,10 +64,14 @@ public class ShortRefEx002ArenaDiceDuel
             int playerHand = dice.Next(1, 7);
             int enemyHand = dice.Next(1,7);
 
+            Console.WriteLine($"You rolled {playerHand}");
+            Console.WriteLine($"Enemy rolled {enemyHand}");
+            Console.WriteLine("\n");
+
             if (enemyHand > playerHand)
             {
                 playerHP -= globalDamage;
-                Console.WriteLine("You Took 2HP damage!");
+                Console.WriteLine($"You Took 2HP damage!");
             }
             else if (playerHand > enemyHand)
             {
@@ -86,13 +90,13 @@ public class ShortRefEx002ArenaDiceDuel
             if (playerHP <= 0)
             {
                 Console.WriteLine("\n");
-                Console.WriteLine("You died!💀");
+                Console.WriteLine("You were defeated💀");
                 playerDied = true;
             }
             else if (enemyHP <= 0)
             {
                 Console.WriteLine("\n");
-                Console.WriteLine("The enemy died!");
+                Console.WriteLine("Victory in the arena!");
                 enemyDied = true;
             }
             Console.WriteLine("--------------------");
