@@ -41,29 +41,6 @@ public class ShortRefEx002ArenaDiceDuel
 {
     public static void RunApp()
     {
-        /*
-        Starting stats:
-        - Player HP: 10
-        - Enemy HP: 10
-
-        Rules:
-        1. Use a while or do-while loop to run the battle
-        2. Each run:
-            - Print: "Press Enter to roll the dice"
-            - Wait for input
-            - Generate:
-                - Player roll -> random 1-6
-                - Enemy roll -> random 1-6
-        3. Compare rolls:
-            If player roll > enemy roll -> enemy loses 2HP
-            If enemy roll > player roll -> player loses 2HP
-            If equal -> print "Clash! No damage"
-        4. After each round print both HP values
-        5. The game ends when:
-            - Player HP <= 0
-            - Enemy HP <= 0
-        */
-
         int playerHP = 10;
         int enemyHP = 10;
 
