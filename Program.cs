@@ -4,5 +4,5 @@
 // Cg14Exercise3.Run();
 
 // Small console app
-ShortRefEx003ArenaCritDuel shortRefEx003ArenaCritDuel = new();
-shortRefEx003ArenaCritDuel.RunApp();
+ShortRefEx004TheCursedGauntlet shortRefEx004TheCursedGauntlet = new();
+shortRefEx004TheCursedGauntlet.RunApp();
