@@ -101,7 +101,7 @@ public class ShortRefEx004TheCursedGauntlet
                         break;
                 }
 
-            } while (!quitGame && !playerDied);
+            } while (!quitGame && !playerDied && !demonDied);
 
             if (quitGame || playerDied) break;
         }
@@ -109,6 +109,7 @@ public class ShortRefEx004TheCursedGauntlet
         if (!playerDied)
         {
             allDemonsDied = true;
+            Console.WriteLine("\nYou beat the game! Thank you for playing.");
         }
     }
 
