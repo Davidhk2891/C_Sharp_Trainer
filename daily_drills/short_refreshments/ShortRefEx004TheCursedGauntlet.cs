@@ -46,86 +46,74 @@ public class ShortRefEx004TheCursedGauntlet
 {
     private float playerHealth = 30;
     private Random randomGenerator= new();
-    private float ashveilHealth, dreadmawHealth, theHollowHealth;
     private string? currentDemonName;
     private float currentDemonHealth;
     private bool enemyGreeted = false;
     private bool quitGame = false;
+    private bool playerDied = false;
+    private bool demonDied = false;
+    private bool allDemonsDied = false;
+    private string[] mobsNames = {"Ashveil", "Dreadmaw", "The Hollow"};
+    private float[] mobsLifes = new float[3];
+    private ConsoleKeyInfo key;
 
     public void RunApp()
     {
-        ashveilHealth = randomGenerator.Next(15, 26);
-        dreadmawHealth = randomGenerator.Next(15, 26);
-        theHollowHealth = randomGenerator.Next(15, 26);
-
-        int enemySelector = randomGenerator.Next(1, 4);
-
-        ConsoleKeyInfo key;
 
         Console.WriteLine("----------------------------------------");
         Console.WriteLine("THE CURSED GAUNTLET v1.0");
         Console.WriteLine("----------------------------------------");
 
-        switch (enemySelector)
+        for (int i = 0; i < mobsNames.Length; i++)
         {
-            case 1:
-                currentDemonName = "Ashveil";
-                currentDemonHealth = ashveilHealth;
-                break;
-            case 2:
-                currentDemonName = "Dreadmaw";
-                currentDemonHealth = dreadmawHealth;
-                break;
-            case 3:
-                currentDemonName = "The Hollow";
-                currentDemonHealth = theHollowHealth;
-                break;
-            default:
-                currentDemonName = "Ashveil";
-                currentDemonHealth = ashveilHealth;
-                break;
+
+            mobsLifes[i] = randomGenerator.Next(15, 26);
+
+            currentDemonName = mobsNames[i];
+            currentDemonHealth = mobsLifes[i];
+
+            enemyGreeted = false;
+            demonDied = false;
+             
+            do
+            {
+                if (!enemyGreeted)
+                {
+                    Console.WriteLine($"{currentDemonName} emerges from the shadows. HP: {currentDemonHealth}");
+                    enemyGreeted = true;   
+                }
+                
+                Console.WriteLine("----------------------------------------");
+
+                Console.WriteLine("Press Enter to fight. Q to flee like a dog.");
+                Console.WriteLine("----");
+                key = Console.ReadKey(true);
+                switch (key.Key)
+                {
+                    case ConsoleKey.Enter:
+                        Attack();
+                        break;
+                    case ConsoleKey.Q:
+                        QuitGame();
+                        break;
+                    default:
+                        UnrecognizedInput();
+                        break;
+                }
+
+            } while (!quitGame && !playerDied);
+
+            if (quitGame || playerDied) break;
         }
 
-        do
+        if (!playerDied)
         {
-            if (!enemyGreeted)
-            {
-                Console.WriteLine($"{currentDemonName} emerges from the shadows. HP: {currentDemonHealth}");
-                enemyGreeted = true;   
-            }
-            
-            Console.WriteLine("----------------------------------------");
-
-            Console.WriteLine("Press Enter to fight. Q to flee like a dog.");
-            Console.WriteLine("----");
-            key = Console.ReadKey(true);
-            switch (key.Key)
-            {
-                case ConsoleKey.Enter:
-                    Attack();
-                    break;
-                case ConsoleKey.Q:
-                    QuitGame();
-                    break;
-                default:
-                    UnrecognizedInput();
-                    break;
-            }
-
-        } while (!quitGame && playerHealth > 0);
+            allDemonsDied = true;
+        }
     }
 
     private void Attack()
     {
-        /*
-        Each round:
-            - Enter to attack
-            - Player deals random 3-8 damage
-            - Demon deals random 2-6 damage
-            - 25% chance either attack is a critical hit -- Double the damage
-            - Print what happened, print both HPs after each round
-        */
-
         // 1. Player turn-----------
         float playerDmg = randomGenerator.Next(3, 9);
         float playerCritDmgChance = randomGenerator.Next(1, 5);
@@ -146,42 +134,60 @@ public class ShortRefEx004TheCursedGauntlet
 
         currentDemonHealth -= playerDmg;
 
-        if (currentDemonHealth < 0) currentDemonHealth = 0;
+        if (currentDemonHealth <= 0)
+        {
+            currentDemonHealth = 0; 
+            demonDied = true;   
+        }
         //-------------------------
 
         // 2. Demon turn-----------
-        float demonDmg = randomGenerator.Next(2, 7);
-        float demonCritDmgChance = randomGenerator.Next(1, 5);
-        bool isDemonCriticalHit = false;
-
-        if (demonCritDmgChance == 4)
+        if (currentDemonHealth != 0)
         {
-            demonDmg *= 2;
-            isDemonCriticalHit = true;
+            float demonDmg = randomGenerator.Next(2, 7);
+            float demonCritDmgChance = randomGenerator.Next(1, 5);
+            bool isDemonCriticalHit = false;
+
+            if (demonCritDmgChance == 4)
+            {
+                demonDmg *= 2;
+                isDemonCriticalHit = true;
+            }
+
+            if (isDemonCriticalHit)
+                Console.WriteLine($"Demon critical hit! {currentDemonName} strikes you for {demonDmg} damage");
+            else
+                Console.WriteLine($"{currentDemonName} strikes you for {demonDmg} damage");
+
+            isDemonCriticalHit = false;
+
+            playerHealth -= demonDmg;
+            
+            if (playerHealth <= 0)
+            {
+                playerHealth = 0;
+                playerDied = true;      
+            }
         }
-
-        if (isDemonCriticalHit)
-            Console.WriteLine($"Demon critical hit! {currentDemonName} strikes you for {demonDmg} damage");
-        else
-            Console.WriteLine($"{currentDemonName} strikes you for {demonDmg} damage");
-
-        isDemonCriticalHit = false;
-
-        playerHealth -= demonDmg;
-        
-        if (playerHealth < 0) playerHealth = 0;
         //--------------------------
 
         // 3. Round summary---------
-        Console.WriteLine($"Your HP: {playerHealth} | {currentDemonName} HP: {currentDemonHealth}");
-
-        /*
-            LEFT HERE: How can I discard the enemy once I defeat it, and move to the next one?
-
-            Break it down:
-            1. 
-
-        */
+        if (playerDied)
+        {
+            Console.WriteLine($"Your HP: {playerHealth} | {currentDemonName} HP: {currentDemonHealth}");
+            Console.WriteLine("YOU DIED.");
+        }
+        else if (demonDied)
+        {
+            Console.WriteLine($"ENEMY FELLED");
+            Console.WriteLine("You recovered 10 HP");
+            playerHealth += 10;
+            Console.WriteLine($"Your HP: {playerHealth} | {currentDemonName} HP: {currentDemonHealth}");
+        }
+        else
+        {
+            Console.WriteLine($"Your HP: {playerHealth} | {currentDemonName} HP: {currentDemonHealth}");
+        }
         //--------------------------
     }
 
