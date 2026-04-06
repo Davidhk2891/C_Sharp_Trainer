@@ -136,13 +136,7 @@ public class ShortRefEx005TheBlacksmithForge
             Console.WriteLine($"You attack {bossName} and deal {playerAttackDmgRange} damage");   
 
             /*
-                - Player attack = random roll within the chosen weapon's range
-                - Boss deals random 3-7 damage per round
-                - Print round results each round
-                - Game ends when either HP hits zero
-                - Win: "The beast falls. The forge-master nods."
-                - Lose: "The darkness takes you. Again."
-
+                TEST WORK
                 PROVIDE LINK TO C# NOTES TO CLAUDE TO SEE HOW THE NOTES CAN BE IMPROVED
             */
 
@@ -161,11 +155,24 @@ public class ShortRefEx005TheBlacksmithForge
                 Console.WriteLine($"{bossName} attacks you and deals {bossAttackDmgRange} damage");
             }
 
-            // Turn summary LEFT HERE !!
+            if (playerHealth <= 0)
+            {
+                if (playerHealth < 0) playerHealth = 0;
+                isPlayerDead = true;
+            } 
 
+            // Turn summary
             Console.WriteLine($"Player health: {playerHealth}");
+            Console.WriteLine($"{bossName} health: {bossHealth}");
 
         } while (!isPlayerDead && !isBossDead);
+
+        if (isBossDead)
+            Console.WriteLine("The beast falls. The forge-master nods");
+        else if (isPlayerDead)
+            Console.WriteLine("The darkness takes you. Again");
+        
+        ExitGame();
     }
 
     private void ExitGame()
