@@ -161,8 +161,9 @@ public class ShortRefEx005TheBlacksmithForge
                 Console.WriteLine($"{bossName} attacks you and deals {bossAttackDmgRange} damage");
             }
 
-            // Turn summary LEFT HERE
-            Console.WriteLine($"Player health: ");
+            // Turn summary LEFT HERE !!
+
+            Console.WriteLine($"Player health: {playerHealth}");
 
         } while (!isPlayerDead && !isBossDead);
     }
