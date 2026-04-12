@@ -53,10 +53,8 @@ public class ShortRefEx004TheCursedGauntlet
     private bool playerDied = false;
     private bool demonDied = false;
     private bool allDemonsDied = false;
-    private string[] mobsNames = {"Ashveil", "Dreadmaw", "The Hollow"};
+    private string[] mobsNames = ["Ashveil", "Dreadmaw", "The Hollow"];
     private float[] mobsLifes = new float[3];
-    private ConsoleKeyInfo key;
-
     public void RunApp()
     {
 
@@ -87,7 +85,7 @@ public class ShortRefEx004TheCursedGauntlet
 
                 Console.WriteLine("Press Enter to fight. Q to flee like a dog.");
                 Console.WriteLine("----");
-                key = Console.ReadKey(true);
+                ConsoleKeyInfo key = Console.ReadKey(true);
                 switch (key.Key)
                 {
                     case ConsoleKey.Enter:

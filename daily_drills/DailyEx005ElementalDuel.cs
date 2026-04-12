@@ -33,7 +33,7 @@ public class DailyEx005ElementalDuel()
     /*
         1. Write method GetWinner
         2. Write a method GetRandomElement() that returns a random element string
-        3. Player picks their element once at the start by typing 1, 2 or 3
+        3. Player pics their element once at the start by typing 1, 2 or 3
     */
 
     string player = "player";
@@ -42,10 +42,13 @@ public class DailyEx005ElementalDuel()
     string fire = "fire";
     string water = "water";
     string ice = "ice";
+    string? choosenElement = "";
+    bool quitGame = false;
 
     public void RunApp()
     {
         Greet();
+        PlayerElementPick();
     }
 
     private void Greet()
@@ -53,7 +56,40 @@ public class DailyEx005ElementalDuel()
         Console.WriteLine("------------------------");
         Console.WriteLine("ELEMENTAL DUEL V1.0");
         Console.WriteLine("------------------------");
-        Console.WriteLine("Pick your element:\n1 - Ice\n2 - Fire\n3 - Water\n---");
+        Console.WriteLine("Pick your element:\n1 - Ice\n2 - Fire\n3 - Water\nQ - Quit game\n---");
+    }
+
+    private void PlayerElementPick()
+    {
+        bool validPick = false;
+        do
+        {
+            choosenElement = Console.ReadLine();
+            switch (choosenElement)
+            {
+                case "1":
+                    choosenElement = ice;
+                    validPick = true;
+                    break;
+                case "2":
+                    choosenElement = fire;
+                    validPick = true;
+                    break;
+                case "3":
+                    choosenElement = water;
+                    validPick = true;
+                    break;
+                case "q":
+                    QuitGame();
+                    break;
+                default:
+                    InvalidInput();
+                    break;
+            }    
+        } while (!validPick && !quitGame);
+        
+        if (validPick)
+            Console.WriteLine($"You've chosen {choosenElement}");
     }
 
     private string GetWinner(string player, string enemy)
@@ -98,5 +134,16 @@ public class DailyEx005ElementalDuel()
                 break;
         }
         return element;
+    }
+
+    private void InvalidInput()
+    {
+        Console.WriteLine("Invalid input. Please try again");
+    }
+
+    private void QuitGame()
+    {
+        quitGame = true;
+        Console.WriteLine("Good bye.");
     }
 }
