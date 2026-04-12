@@ -31,8 +31,8 @@ public class ShortRefEx005TheBlacksmithForge
     private Random randomGenerator = new();
     private int playerHealth = 25;
     private int playerGold = 50;
-    private string playerWeapon;
-    private string playerWeaponDmgRange;
+    private string? playerWeapon;
+    private string? playerWeaponDmgRange;
     private string? playerChoice;
     private string[] weaponNames = {"Master mace", "Great sword", "Solider axe"};
     private int[] weaponPrices = {15, 20, 25};
@@ -51,7 +51,8 @@ public class ShortRefEx005TheBlacksmithForge
         ChooseWeapon();
 
         // Engage boss
-        EngageBoss();
+        if (!exitGame)
+            EngageBoss();
     }
 
     private void Intro()
@@ -74,34 +75,35 @@ public class ShortRefEx005TheBlacksmithForge
             Console.WriteLine($"{i + 1} - {weaponNames[i]} | Dmg: {weaponDmgRanges[i]} | Cost: {weaponPrices[i]}");
         }
         Console.WriteLine("Q - Quit game");
-        playerChoice = Console.ReadLine();
         
         do
         {
+            playerChoice = Console.ReadLine();
             switch (playerChoice)
-        {
-            case "1":
-                playerWeapon = weaponNames[0];
-                playerWeaponDmgRange = weaponDmgRanges[0];
-                playerGold -= weaponPrices[0];
-                break;
-            case "2":
-                playerWeapon = weaponNames[1];
-                playerWeaponDmgRange = weaponDmgRanges[1];
-                playerGold -= weaponPrices[1];
-                break;
-            case "3":
-                playerWeapon = weaponNames[2];
-                playerWeaponDmgRange = weaponDmgRanges[2];
-                playerGold -= weaponPrices[2];
-                break;
-            case "q":
-                ExitGame();
-                break;
-            default:
-                InvalidInputMessage();
-                break;
-        }    
+            {
+                case "1":
+                    playerWeapon = weaponNames[0];
+                    playerWeaponDmgRange = weaponDmgRanges[0];
+                    playerGold -= weaponPrices[0];
+                    break;
+                case "2":
+                    playerWeapon = weaponNames[1];
+                    playerWeaponDmgRange = weaponDmgRanges[1];
+                    playerGold -= weaponPrices[1];
+                    break;
+                case "3":
+                    playerWeapon = weaponNames[2];
+                    playerWeaponDmgRange = weaponDmgRanges[2];
+                    playerGold -= weaponPrices[2];
+                    break;
+                case "q":
+                    ExitGame();
+                    break;
+                default:
+                    playerWeaponDmgRange = "0";
+                    InvalidInputMessage();
+                    break;
+            }    
         } while (playerChoice != "1" && playerChoice != "2" && playerChoice != "3" && !exitGame);
         
         if (playerChoice == "1" || playerChoice == "2" || playerChoice == "3")
@@ -115,6 +117,7 @@ public class ShortRefEx005TheBlacksmithForge
 
     private void EngageBoss()
     {
+
         int bossHealth = randomGenerator.Next(20, 36);    
         int bossAttackDmgRange;   
         string bossName = "The Ice Queen";
@@ -134,11 +137,6 @@ public class ShortRefEx005TheBlacksmithForge
             bossHealth -= playerAttackDmgRange;
 
             Console.WriteLine($"You attack {bossName} and deal {playerAttackDmgRange} damage");   
-
-            /*
-                TEST WORK
-                PROVIDE LINK TO C# NOTES TO CLAUDE TO SEE HOW THE NOTES CAN BE IMPROVED
-            */
 
             if (bossHealth <= 0)
             {
