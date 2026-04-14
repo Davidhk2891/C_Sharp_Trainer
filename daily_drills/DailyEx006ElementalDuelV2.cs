@@ -18,6 +18,8 @@
         - Print each round: round number, both elements, who won 
         - After 5 rounds print match summary and overall winner
 */
+using System.Text.RegularExpressions;
+
 public class DailyEx006ElementalDuelV2
 {
     bool quitGame = false;
@@ -27,13 +29,13 @@ public class DailyEx006ElementalDuelV2
     int currentRound = 0;
     int playerWins = 0;
     int enemyWins = 0;
+    int draws = 0;
     Element playerChosenElement = Element.None;
     Element enemyChosenElement = Element.None;
+    RoundResult winner;
     public void RunApp()
     {
-        GreetPlayer();
-        if (!quitGame)
-            RunMatches(totalMatches);
+        Play();
     }
 
     private enum Element
@@ -51,8 +53,16 @@ public class DailyEx006ElementalDuelV2
         Draw
     }
 
+    private void Play()
+    {
+        GreetPlayer();
+        if (!quitGame)
+            RunMatches(totalMatches);
+    }
+
     private void GreetPlayer()
     {
+        Console.Clear();
         DrawLine();
         Console.WriteLine("ELEMENTAL DUEL V2");
         DrawLine();
@@ -65,27 +75,33 @@ public class DailyEx006ElementalDuelV2
         {
             RunRounds(totalRounds);   
         }
+        MatchSummary();
+    }
+
+    private void MatchSummary()
+    {
+        Console.WriteLine($"---- Match summary ----");
+        Console.WriteLine($"Player wins: {playerWins}");
+        Console.WriteLine($"Enemy wins: {enemyWins}");
+        Console.WriteLine($"Draws: {draws}");
+
+        RoundResult matchWinner;
+        if (playerWins > enemyWins) matchWinner = RoundResult.Player;
+        else if (playerWins < enemyWins) matchWinner = RoundResult.Enemy;
+        else matchWinner = RoundResult.Draw;
+        Console.WriteLine($"Match winner: {matchWinner}");
     }
 
     private void RunRounds(int rounds)
     {
-        /*
-            - Declare enum Element { Fire, Water, Ice } and enum RoundResult { Player, Enemy, Draw }
-            - Write GetWinner(Element player, Element enemy) -> returns a RoundResult
-            - Write GetRandomElement() -> returns an Element
-            - Player picks element once at the start (1,2,3)
-            - Invalid input -> Sneer and re-prompt
-            - Game auto-plays all 5 rounds (No prompts between rounds)
-            - Print each round: round number, both elements, who won < 
-            - After 5 rounds print match summary and overall winner
-        */
         for (int i = 1; i <= rounds; i++)
         {
+            currentRound = i;
+            Console.WriteLine($"----- Round {currentRound} -----");
             EnemySelectElement();
             Console.WriteLine($"You chose {playerChosenElement}");
             Console.WriteLine($"Enemy chose {enemyChosenElement}");
-            DrawLine();
-            RoundResult winner = GetWinner(playerChosenElement, enemyChosenElement);
+            winner = GetWinner(playerChosenElement, enemyChosenElement);
             Console.WriteLine($"Round {i} winner: {winner}");
             DrawLine();
             Thread.Sleep(1000);
@@ -147,6 +163,10 @@ public class DailyEx006ElementalDuelV2
             if (enemy == Element.Water) winner = RoundResult.Player;
             else if (enemy == Element.Fire) winner = RoundResult.Enemy;
         }
+
+        if (winner == RoundResult.Player) playerWins++;
+        else if (winner == RoundResult.Enemy) enemyWins++;
+        else if (winner == RoundResult.Draw) draws++;
         return winner;
     }
 
