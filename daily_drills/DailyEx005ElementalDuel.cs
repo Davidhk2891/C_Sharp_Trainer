@@ -30,25 +30,25 @@
 */
 public class DailyEx005ElementalDuel()
 {
-    /*
-        1. Write method GetWinner
-        2. Write a method GetRandomElement() that returns a random element string
-        3. Player pics their element once at the start by typing 1, 2 or 3
-    */
-
     string player = "player";
     string enemy = "enemy";
     string draw = "draw";
     string fire = "fire";
     string water = "water";
     string ice = "ice";
-    string? choosenElement = "";
     bool quitGame = false;
+    int playerWins = 0;
+    int enemywins = 0;
+    int draws = 0;
+    int currentRound = 0;
+    int maxRounds = 5;
+    bool playAgain = true;
+    Random rand = new();
 
     public void RunApp()
     {
         Greet();
-        PlayerElementPick();
+        RunRound();
     }
 
     private void Greet()
@@ -56,40 +56,80 @@ public class DailyEx005ElementalDuel()
         Console.WriteLine("------------------------");
         Console.WriteLine("ELEMENTAL DUEL V1.0");
         Console.WriteLine("------------------------");
-        Console.WriteLine("Pick your element:\n1 - Ice\n2 - Fire\n3 - Water\nQ - Quit game\n---");
     }
 
-    private void PlayerElementPick()
+    private void RunRound()
     {
+        do
+        {
+            Console.WriteLine("Pick your element:\n1 - Ice\n2 - Fire\n3 - Water\nQ - Quit game\n---");
+
+            string playerChoosenElement = PlayerElementPick();
+            if (quitGame) return;
+            string enemyChoosenElement = GetRandomElement();
+
+            Console.WriteLine($"You've chosen -- {playerChoosenElement} --");
+
+            Console.WriteLine($"Enemy chose -- {enemyChoosenElement} --");
+
+            string winner = GetWinner(playerChoosenElement, enemyChoosenElement);
+
+            if (!quitGame)
+            {
+                if (winner == player)
+                {
+                    Console.WriteLine($"{player} wins this round");
+                    playerWins++;   
+                }
+                else if (winner == enemy)
+                {
+                    Console.WriteLine($"{enemy} wins this round");
+                    enemywins++;   
+                }
+                else if (winner == draw)
+                {
+                    Console.WriteLine("Draw");
+                    draws++;
+                }
+                   
+                TrackRounds();
+                currentRound++;  
+            }
+        } while (playAgain && currentRound != maxRounds);
+    }
+
+    private string PlayerElementPick()
+    {
+        string playerChoosenElement = "";
         bool validPick = false;
         do
         {
-            choosenElement = Console.ReadLine();
-            switch (choosenElement)
+            string? playerInput = Console.ReadLine();
+            switch (playerInput)
             {
                 case "1":
-                    choosenElement = ice;
+                    playerChoosenElement = ice;
                     validPick = true;
                     break;
                 case "2":
-                    choosenElement = fire;
+                    playerChoosenElement = fire;
                     validPick = true;
                     break;
                 case "3":
-                    choosenElement = water;
+                    playerChoosenElement = water;
                     validPick = true;
                     break;
                 case "q":
                     QuitGame();
+                    validPick = true;
                     break;
                 default:
                     InvalidInput();
                     break;
             }    
-        } while (!validPick && !quitGame);
+        } while (!validPick);
         
-        if (validPick)
-            Console.WriteLine($"You've chosen {choosenElement}");
+        return playerChoosenElement;
     }
 
     private string GetWinner(string player, string enemy)
@@ -119,7 +159,6 @@ public class DailyEx005ElementalDuel()
     private string GetRandomElement()
     {
         string element = "";
-        Random rand = new();
         int choosenElement = rand.Next(1, 4);
         switch (choosenElement)
         {
@@ -134,6 +173,59 @@ public class DailyEx005ElementalDuel()
                 break;
         }
         return element;
+    }
+
+    private void TrackRounds()
+    {
+        Console.WriteLine("--------------");
+        Console.WriteLine($"Player wins: {playerWins}");
+        Console.WriteLine($"Enemy wins: {enemywins}");
+        Console.WriteLine($"Draws: {draws}");
+        Console.WriteLine("--------------");
+
+        bool playerWinsMatch = playerWins == 3;
+        bool enemyWinsMatch = enemywins == 3;
+
+        if (playerWinsMatch)
+        {
+            Console.WriteLine("PLAYER WINS THE MATCH!");
+            playAgain = false;
+        }
+        else if (enemyWinsMatch)
+        {
+            Console.WriteLine("ENEMY WINS THE MATCH!");
+            playAgain = false;
+        }
+        else
+        {
+            if (currentRound == maxRounds)
+            {
+                if (playerWins > enemywins)
+                {
+                    Console.WriteLine("PLAYER WINS THE MATCH!");
+                    playAgain = false;   
+                }
+                else if (enemywins > playerWins)
+                {
+                    Console.WriteLine("ENEMY WINS THE MATCH!");
+                    playAgain = false;
+                }
+                else
+                {
+                    Console.WriteLine("MATCH IS A DRAW!");   
+                    playAgain = false;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Play again(y/n)?");
+                if (!(Console.ReadLine() == "y"))
+                {
+                    playAgain = false;
+                    QuitGame();   
+                }   
+            }
+        }   
     }
 
     private void InvalidInput()

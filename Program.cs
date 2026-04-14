@@ -4,5 +4,5 @@
 // Cg14Exercise3.Run();
 
 // Small console app
-DailyEx005ElementalDuel dailyEx005ElementalDuel = new();
-dailyEx005ElementalDuel.RunApp();
+DailyEx006ElementalDuelV2 dailyEx006ElementalDuelV2 = new();
+dailyEx006ElementalDuelV2.RunApp();
