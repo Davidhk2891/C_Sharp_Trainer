@@ -18,8 +18,6 @@
         - Print each round: round number, both elements, who won 
         - After 5 rounds print match summary and overall winner
 */
-using System.Text.RegularExpressions;
-
 public class DailyEx006ElementalDuelV2
 {
     bool quitGame = false;
@@ -33,6 +31,7 @@ public class DailyEx006ElementalDuelV2
     Element playerChosenElement = Element.None;
     Element enemyChosenElement = Element.None;
     RoundResult winner;
+    readonly Random rng = new();
     public void RunApp()
     {
         Play();
@@ -173,7 +172,6 @@ public class DailyEx006ElementalDuelV2
     private Element GetRandomElement()
     {
         Element randomElement = Element.None;
-        Random rng = new();
         int randomElementIndex = rng.Next(1, 4);
         switch (randomElementIndex)
         {
