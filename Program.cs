@@ -1,8 +1,4 @@
 ﻿// Run program
+DailyEx007ElementalRoster dailyEx007ElementalRoster = new();
+dailyEx007ElementalRoster.RunApp();
 
-// Exercise program
-// Cg14Exercise3.Run();
-
-// Small console app
-DailyEx006ElementalDuelV2 dailyEx006ElementalDuelV2 = new();
-dailyEx006ElementalDuelV2.RunApp();
