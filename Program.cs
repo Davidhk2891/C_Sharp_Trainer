@@ -1,4 +1,4 @@
 ﻿// Run program
-DailyEx007ElementalRoster dailyEx007ElementalRoster = new();
-dailyEx007ElementalRoster.RunApp();
+DailyEx009ElementalHallOfFame dailyEx009ElementalHallOfFame = new();
+dailyEx009ElementalHallOfFame.RunApp();
 
