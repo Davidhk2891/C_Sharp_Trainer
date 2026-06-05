@@ -1,4 +1,4 @@
 ﻿// Run program
-DailyEx011TheRankedCodex dailyEx011TheRankedCodex = new();
-dailyEx011TheRankedCodex.RunApp();
+DailyEx012FlappyElementalSurvivalRun dailyEx012FlappyElementalSurvivalRun = new();
+dailyEx012FlappyElementalSurvivalRun.RunApp();
 

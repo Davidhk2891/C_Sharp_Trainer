@@ -1,0 +1,53 @@
+Flappy Elemental - Survival Run
+
+Premise:
+You're flying through the gauntlet. Obstacles appear one by one. Each has a random element. You have a current element, but you can swap it by grabbing a chip
+before engaging. Survive as long as possible.
+
+Setup:
+- Player starts with a random element
+- Each round: A new obstacle appears with a random element
+- Before, player can grab a random element chip (y/n)
+- Player then chooses to engage or dodge
+- Engaging resolved by element rules
+- Dodging always succeeds but costs 1 HP
+- Plyer starts with 5 HP
+
+Rules:
+- Use your 'Element' enum and GetWinner() from memory
+- Use Console.ReadLine() for player input
+- Use int.TryParse() -> Present numbered choices, validate input
+- Grabbing a chip: Reassings player element randomly using GetRandomElement()
+- Engaging: 
+    - Win -> Obstacle destroyed, continue. 
+    - Draw -> Lose element (become None).
+    - Lose -> Game over
+    - Skip -> Lose 1 HP
+- If player element is 'None' and they engage, they lose
+- Game ends when HP hits 0. Print score (rounds survived)
+- Use a ternary at least once
+- Use modulus to trigger an "element shift" warning message every 3rd round
+
+Advanced UI:
+- Use PadRight() to format the HUD line: Player name, element, HP all aligned in fixed width columns
+- Use String.Join(" | ", ...) to build and print the round summary line from an array of result strings
+- Use a ternary at least once for result formatting
+- Print final score using PadLeft()
+
+Advanced UI - Round example:
+---------------------------------------------
+DAVID         | Fire          | HP: 5
+---
+Round 3 | ⚠️ Element Shift!
+A Water obstacle approaches!
+
+A Fire chip is nearby. Grab it? (1-Yes / 2-No)
+> 1
+You grabbed Fire!
+
+1-Engage / 2-Dodge
+> 1
+
+Fire vs Water → You lose! HP: 4
+Round 3 | Fire obstacle | Engaged | Defeat
+---------------------------------------------
