@@ -10,7 +10,7 @@ public class DailyEx012FlappyElementalSurvivalRun
             - Game asks if you want to grab a chip (random)
             - Grab it or not, after 3 more seconds (anim), obstacle appears
             - Game warns an obstacle of element X appears
-            - Engage or not engage
+            - Engage or dodge
                 - If engage and win, you win something and move one
                 - If engage and lose (RPS system), game over
                 - If dodge, lose element and move on
@@ -22,22 +22,73 @@ public class DailyEx012FlappyElementalSurvivalRun
         Element playerElement = Element.None;
         string accept = "y";
         string deny = "n";
+        int playerHP = 5;
+        string invalidInput = "Invalid input. Please try again";
+        Obstacle randomObstacleType;
+        Element randomObstacleElement;
+
+        // Assign element to player
         do
         {
             Console.WriteLine($"Do you want to grab a chip? ({accept}/{deny})");
             playerInput = Console.ReadLine();
 
             if (playerInput != accept && playerInput != deny)
-            {
                 Console.WriteLine("Invalid input. Please try again");
-            }
 
         } while (playerInput != accept && playerInput != deny);
 
         if (playerInput == accept)
-            playerElement = GetRandomElement();
+            playerElement = GetRandomElement();   
         
         Console.WriteLine($"Your element is: {ParseElementToReadable(playerElement)}");
+
+        RunAnimationSpinner();
+
+        PrintEmptyLine();
+        do
+        {
+            randomObstacleType = GetRandomObstacle();
+            randomObstacleElement = GetRandomElement();
+            // Warn player of incoming obstacle
+            Console.WriteLine($"A {randomObstacleType} of type {randomObstacleElement} appears");
+            playerInput = null;
+            while (playerInput == null || (playerInput != accept && playerInput != deny))
+            {
+                // Ask player if he wants to engage or not
+                Console.WriteLine($"Do you want to engage? ({accept}/{deny})");
+                playerInput = Console.ReadLine();
+
+                if (playerInput == null || (playerInput != accept && playerInput != deny))
+                    Console.WriteLine("Invalid input. Please try again");
+            }
+
+            PrintFullDottetLine();
+            PrintEmptyLine(); 
+            if (playerInput == accept)
+            {
+                Console.WriteLine("You chose to engage the obstacle");
+                Console.WriteLine($"Your element: {playerElement}");
+                Console.WriteLine($"{randomObstacleType} element: {randomObstacleElement}");
+                RunAnimationSpinner("Engaging");
+                PrintHalfDottedLine();
+                Entity encounterWinner = GetWinner(playerElement, randomObstacleElement);
+                Console.WriteLine($"Winner is: {encounterWinner}");
+            }
+            else
+            {
+                RunAnimationSpinner();
+                Console.WriteLine("You chose to dodge the obstacle. You lose 1 HP");
+                playerHP -= 1;
+                Console.WriteLine($"Your current HP is {playerHP}");
+            }
+            PrintEmptyLine(); 
+            PrintFullDottetLine();
+
+        } while (playerHP > 0);
+
+        if (playerHP <= 0)
+            Console.WriteLine("GAME OVER");
     }
 
     private Random rng = new();
@@ -47,7 +98,7 @@ public class DailyEx012FlappyElementalSurvivalRun
     {
         Console.Clear();
         Console.WriteLine("FLAPPY ELEMENTAL - SURVIVAL RUN");
-        RunAnimationSpinner(10);
+        RunAnimationSpinner();
         BeginRun();
     }
 
@@ -72,6 +123,36 @@ public class DailyEx012FlappyElementalSurvivalRun
         Player,
         Obstacle,
         None
+    }
+
+    private enum Obstacle
+    {
+        Batty,
+        Waller,
+        Spinner,
+        Bitter
+    }
+
+    private Obstacle GetRandomObstacle()
+    {
+        Obstacle obstacle = Obstacle.Batty;
+        int randomIndex = rng.Next(1, 5);
+        switch (randomIndex)
+        {
+            case 1:
+                obstacle = Obstacle.Batty;
+                break;
+            case 2:
+                obstacle = Obstacle.Waller;
+                break;
+            case 3:
+                obstacle = Obstacle.Spinner;
+                break;
+            case 4:
+                obstacle = Obstacle.Bitter;
+                break;
+        }
+        return obstacle;
     }
 
     private Element GetRandomElement()
@@ -147,7 +228,7 @@ public class DailyEx012FlappyElementalSurvivalRun
     }
 
     // Utilities
-    private void RunAnimationSpinner(int rounds = 10)
+    private void RunAnimationSpinner(string text = "Loading", int rounds = 10)
     {
         string[] spinningSymbols = [ "\\", "|", "/", "-" ];
         int delay = 50;
@@ -156,7 +237,7 @@ public class DailyEx012FlappyElementalSurvivalRun
         {
             for (int j = 0; j < spinningSymbols.Length; j++)
             {
-                Console.Write($"\r Loading...{spinningSymbols[j]}");
+                Console.Write($"\r {text}...{spinningSymbols[j]}");
                 Delay(delay);
             }               
         }
@@ -166,5 +247,20 @@ public class DailyEx012FlappyElementalSurvivalRun
     private void Delay(int delay = 100)
     {
         Thread.Sleep(delay);
+    }
+
+    private void PrintFullDottetLine()
+    {
+        Console.WriteLine("--------------------");
+    }
+
+    private void PrintHalfDottedLine()
+    {
+        Console.WriteLine("----------");
+    }
+
+    private void PrintEmptyLine()
+    {
+        Console.WriteLine();
     }
 }
