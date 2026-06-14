@@ -23,6 +23,7 @@ public class DailyEx012FlappyElementalSurvivalRun
         string accept = "y";
         string deny = "n";
         int playerHP = 5;
+        bool isGameOver = false;
         string invalidInput = "Invalid input. Please try again";
         Obstacle randomObstacleType;
         Element randomObstacleElement;
@@ -45,7 +46,6 @@ public class DailyEx012FlappyElementalSurvivalRun
 
         RunAnimationSpinner();
 
-        PrintEmptyLine();
         do
         {
             randomObstacleType = GetRandomObstacle();
@@ -63,29 +63,48 @@ public class DailyEx012FlappyElementalSurvivalRun
                     Console.WriteLine("Invalid input. Please try again");
             }
 
-            PrintFullDottetLine();
-            PrintEmptyLine(); 
+            PrintFullDottedLine();
+            
             if (playerInput == accept)
             {
                 Console.WriteLine("You chose to engage the obstacle");
                 Console.WriteLine($"Your element: {playerElement}");
                 Console.WriteLine($"{randomObstacleType} element: {randomObstacleElement}");
                 RunAnimationSpinner("Engaging");
-                PrintHalfDottedLine();
+                PrintFullDottedLine();
+
                 Entity encounterWinner = GetWinner(playerElement, randomObstacleElement);
-                Console.WriteLine($"Winner is: {encounterWinner}");
+                if (encounterWinner != Entity.None)
+                {
+                    Console.WriteLine($"{encounterWinner} wins");
+                    if (encounterWinner == Entity.Obstacle)
+                    {
+                        playerHP -= 1;
+                    }
+                    Console.WriteLine($"Your current HP is {playerHP}");
+                }
+                else
+                {
+                    Console.WriteLine("Draw!");
+                }
             }
             else
             {
                 RunAnimationSpinner();
+
+                PrintFullDottedLine();
                 Console.WriteLine("You chose to dodge the obstacle. You lose 1 HP");
                 playerHP -= 1;
                 Console.WriteLine($"Your current HP is {playerHP}");
+                PrintFullDottedLine();
             }
-            PrintEmptyLine(); 
-            PrintFullDottetLine();
 
-        } while (playerHP > 0);
+            PrintFullDottedLine();
+
+            if (playerHP <= 0)
+                isGameOver = true;
+
+        } while (!isGameOver);
 
         if (playerHP <= 0)
             Console.WriteLine("GAME OVER");
@@ -207,8 +226,9 @@ public class DailyEx012FlappyElementalSurvivalRun
         {
             if (obstacleElement == Element.Fire)
                 outcome = Entity.Player;
-            else if (obstacleElement == Element.Water)
+            else if (obstacleElement == Element.Ice)
                 outcome = Entity.Obstacle;
+                // Account for draw <--
         }
         else if (playerElement == Element.Fire)
         {
@@ -223,6 +243,11 @@ public class DailyEx012FlappyElementalSurvivalRun
                 outcome = Entity.Player;
             else if (obstacleElement == Element.Fire)
                 outcome = Entity.Obstacle;
+        }
+        else
+        {
+            // If player has no element
+            outcome = Entity.Obstacle;
         }
         return outcome;
     }
@@ -249,14 +274,9 @@ public class DailyEx012FlappyElementalSurvivalRun
         Thread.Sleep(delay);
     }
 
-    private void PrintFullDottetLine()
+    private void PrintFullDottedLine()
     {
         Console.WriteLine("--------------------");
-    }
-
-    private void PrintHalfDottedLine()
-    {
-        Console.WriteLine("----------");
     }
 
     private void PrintEmptyLine()
