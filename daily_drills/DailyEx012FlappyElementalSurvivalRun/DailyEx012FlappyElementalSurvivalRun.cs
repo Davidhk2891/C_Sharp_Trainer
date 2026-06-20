@@ -228,7 +228,7 @@ public class DailyEx012FlappyElementalSurvivalRun
                 outcome = Entity.Player;
             else if (obstacleElement == Element.Ice)
                 outcome = Entity.Obstacle;
-                // Account for draw <--
+                // Account for draw <-- LEFT HERE
         }
         else if (playerElement == Element.Fire)
         {
