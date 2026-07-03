@@ -24,9 +24,17 @@ Rules:
     - Lose -> Game over
     - Skip -> Lose 1 HP
 - If player element is 'None' and they engage, they lose
-- Game ends when HP hits 0. Print score (rounds survived)
+- Game ends when HP hits 0 or Obstacle wins round. Print score (rounds survived)
 - Use a ternary at least once
 - Use modulus to trigger an "element shift" warning message every 3rd round
+
+Todos:
+- Make sure each fight accounts for a Draw outcome -- DONE
+- Make sure to ask to swap element before next encounter -- DONE
+- Setup counting rounds survived -- DONE
+- Setup advanced UI --
+
+------------------------------------------------------------------------------------------------------------------
 
 Advanced UI:
 - Use PadRight() to format the HUD line: Player name, element, HP all aligned in fixed width columns

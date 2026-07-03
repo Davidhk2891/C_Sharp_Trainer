@@ -7,7 +7,7 @@ public class DailyEx012FlappyElementalSurvivalRun
         a. Loop that does the following:
             - You start naked
             - 3 seconds pass (anim)
-            - Game asks if you want to grab a chip (random)
+            - Game asks if you want to grab a new chip (random)
             - Grab it or not, after 3 more seconds (anim), obstacle appears
             - Game warns an obstacle of element X appears
             - Engage or dodge
@@ -15,6 +15,9 @@ public class DailyEx012FlappyElementalSurvivalRun
                 - If engage and lose (RPS system), game over
                 - If dodge, lose element and move on
             - Repeat until you die
+    
+    4. Build 'rounds survived' system
+    5. Build advanced UI
     */
 
     private void BeginRun()
@@ -23,31 +26,33 @@ public class DailyEx012FlappyElementalSurvivalRun
         string accept = "y";
         string deny = "n";
         int playerHP = 5;
+        int roundsSurvived = 0;
         bool isGameOver = false;
         string invalidInput = "Invalid input. Please try again";
         Obstacle randomObstacleType;
         Element randomObstacleElement;
 
-        // Assign element to player
         do
         {
-            Console.WriteLine($"Do you want to grab a chip? ({accept}/{deny})");
-            playerInput = Console.ReadLine();
 
-            if (playerInput != accept && playerInput != deny)
-                Console.WriteLine("Invalid input. Please try again");
+            // Request new chip (optional)
+            do
+            {
+                Console.WriteLine($"Do you want to grab a new chip? ({accept}/{deny})");
+                playerInput = Console.ReadLine();
 
-        } while (playerInput != accept && playerInput != deny);
+                if (playerInput != accept && playerInput != deny)
+                    Console.WriteLine("Invalid input. Please try again");
 
-        if (playerInput == accept)
-            playerElement = GetRandomElement();   
-        
-        Console.WriteLine($"Your element is: {ParseElementToReadable(playerElement)}");
+            } while (playerInput != accept && playerInput != deny);
 
-        RunAnimationSpinner();
+            if (playerInput == accept)
+                playerElement = GetRandomElement();   
+            
+            Console.WriteLine($"Your element is: {ParseElementToReadable(playerElement)}");
 
-        do
-        {
+            RunAnimationSpinner();
+
             randomObstacleType = GetRandomObstacle();
             randomObstacleElement = GetRandomElement();
             // Warn player of incoming obstacle
@@ -67,6 +72,7 @@ public class DailyEx012FlappyElementalSurvivalRun
             
             if (playerInput == accept)
             {
+                Console.WriteLine($"Round {roundsSurvived + 1}");
                 Console.WriteLine("You chose to engage the obstacle");
                 Console.WriteLine($"Your element: {playerElement}");
                 Console.WriteLine($"{randomObstacleType} element: {randomObstacleElement}");
@@ -79,13 +85,21 @@ public class DailyEx012FlappyElementalSurvivalRun
                     Console.WriteLine($"{encounterWinner} wins");
                     if (encounterWinner == Entity.Obstacle)
                     {
-                        playerHP -= 1;
+                        isGameOver = true;
                     }
-                    Console.WriteLine($"Your current HP is {playerHP}");
+                    else
+                    {
+                        roundsSurvived++;
+                        Console.WriteLine("Round survived");                        
+                    }
                 }
                 else
                 {
                     Console.WriteLine("Draw!");
+                    Console.WriteLine($"You lost your {playerElement} element");                    
+                    roundsSurvived++;
+                    Console.WriteLine("Round survived");
+                    playerElement = AssignNoneElement();                    
                 }
             }
             else
@@ -93,7 +107,9 @@ public class DailyEx012FlappyElementalSurvivalRun
                 RunAnimationSpinner();
 
                 PrintFullDottedLine();
-                Console.WriteLine("You chose to dodge the obstacle. You lose 1 HP");
+                Console.WriteLine("You chose to dodge the obstacle. You lose 1 HP");                
+                roundsSurvived++;
+                Console.WriteLine("Round survived");
                 playerHP -= 1;
                 Console.WriteLine($"Your current HP is {playerHP}");
                 PrintFullDottedLine();
@@ -106,8 +122,11 @@ public class DailyEx012FlappyElementalSurvivalRun
 
         } while (!isGameOver);
 
-        if (playerHP <= 0)
+        if (isGameOver)
+        {
             Console.WriteLine("GAME OVER");
+            Console.WriteLine($"Total rounds survived: {roundsSurvived}");   
+        }            
     }
 
     private Random rng = new();
@@ -227,8 +246,9 @@ public class DailyEx012FlappyElementalSurvivalRun
             if (obstacleElement == Element.Fire)
                 outcome = Entity.Player;
             else if (obstacleElement == Element.Ice)
-                outcome = Entity.Obstacle;
-                // Account for draw <-- LEFT HERE
+                outcome = Entity.Obstacle;                
+            else
+                outcome = Entity.None;
         }
         else if (playerElement == Element.Fire)
         {
@@ -236,6 +256,8 @@ public class DailyEx012FlappyElementalSurvivalRun
                 outcome = Entity.Player;
             else if (obstacleElement == Element.Water)
                 outcome = Entity.Obstacle;
+            else
+                outcome = Entity.None;
         }
         else if (playerElement == Element.Ice)
         {
@@ -243,6 +265,8 @@ public class DailyEx012FlappyElementalSurvivalRun
                 outcome = Entity.Player;
             else if (obstacleElement == Element.Fire)
                 outcome = Entity.Obstacle;
+            else
+                outcome = Entity.None;
         }
         else
         {
