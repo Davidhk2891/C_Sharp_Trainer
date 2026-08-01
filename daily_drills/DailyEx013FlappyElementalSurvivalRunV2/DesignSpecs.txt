@@ -1,0 +1,20 @@
+/*
+Premise:
+    - You are a flyer entering the gauntlet. Type your name, pick a starting element,
+        and survive as many rounds as possible against incoming elemental obstacles.
+Setup:
+    - Player types the name at the start
+    - Player gets a random element
+    - Each round: Random obstacle with random element appears
+    - Player grabs a chip or skipsm then engages or dodges
+    - 5 HP. Game ends at 0
+Rules:
+    - Use Element and Entity enums. Build GetWinner() from memory
+    - Validate all input with int.TryParse()
+    - HUD each round: playerName, playerElement, playerHP -> Formatted with PadRight()
+    - Each round result stored as a string, final summary built String.Join("\n", results[])
+    - Use modulus every 3rd round to trigger "⚠️ Element Shift!" (Obstacle element changes twice
+        rapidly before settling)
+    - Use ternary at least once for result formatting
+    - Player name in all caps using ToUpper()
+*/

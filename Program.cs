@@ -1,4 +1,4 @@
 ﻿// Run program
-DailyEx012FlappyElementalSurvivalRun dailyEx012FlappyElementalSurvivalRun = new();
-dailyEx012FlappyElementalSurvivalRun.RunApp();
+DailyEx013FlappyElementalSurvivalRunV2 dailyEx013FlappyElementalSurvivalRunV2 = new();
+dailyEx013FlappyElementalSurvivalRunV2.RunApp();
 

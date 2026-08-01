@@ -15,30 +15,33 @@ public class DailyEx012FlappyElementalSurvivalRun
                 - If engage and lose (RPS system), game over
                 - If dodge, lose element and move on
             - Repeat until you die
-    
     4. Build 'rounds survived' system
     5. Build advanced UI
     */
 
     private void BeginRun()
     {
-        Element playerElement = Element.None;
-        string accept = "y";
-        string deny = "n";
+        string accept = "1";
+        string deny = "2";
         int playerHP = 5;
         int roundsSurvived = 0;
         bool isGameOver = false;
+        string currentMessage = "";
         string invalidInput = "Invalid input. Please try again";
         Obstacle randomObstacleType;
         Element randomObstacleElement;
+        string playerName = "david".ToUpper();
+        Element playerElement = AssignNoneElement();
+        Element randomElement = AssignNoneElement();
 
         do
-        {
-
+        {            
             // Request new chip (optional)
+            randomElement = GetRandomElement();
+            currentMessage = $"A {randomElement} chip is nearby. Grab it? ({accept}-Yes / {deny}-No)";
             do
             {
-                Console.WriteLine($"Do you want to grab a new chip? ({accept}/{deny})");
+                AlwaysPrintTopHeader(playerName, ParseElementToReadable(playerElement), playerHP, currentMessage, roundsSurvived + 1);
                 playerInput = Console.ReadLine();
 
                 if (playerInput != accept && playerInput != deny)
@@ -47,42 +50,52 @@ public class DailyEx012FlappyElementalSurvivalRun
             } while (playerInput != accept && playerInput != deny);
 
             if (playerInput == accept)
-                playerElement = GetRandomElement();   
-            
-            Console.WriteLine($"Your element is: {ParseElementToReadable(playerElement)}");
+            {
+                playerElement = randomElement;
+                currentMessage = $"You grabbed {ParseElementToReadable(playerElement)}!";
+            }
+            else
+            {
+                currentMessage = $"Your current element is {ParseElementToReadable(playerElement)}";
+            }                   
+        
+            AlwaysPrintTopHeader(playerName, ParseElementToReadable(playerElement), playerHP, currentMessage,  roundsSurvived + 1);
 
             RunAnimationSpinner();
 
             randomObstacleType = GetRandomObstacle();
             randomObstacleElement = GetRandomElement();
             // Warn player of incoming obstacle
-            Console.WriteLine($"A {randomObstacleType} of type {randomObstacleElement} appears");
+            currentMessage = $"A {randomObstacleType} of type {randomObstacleElement} approaches!\n\n";
+            AlwaysPrintTopHeader(playerName, ParseElementToReadable(playerElement), playerHP, currentMessage,  roundsSurvived + 1);
+            // LEFT HERE
             playerInput = null;
+            currentMessage += $"Do you want to engage? ({accept}-Engage / {deny}-Dodge)";
             while (playerInput == null || (playerInput != accept && playerInput != deny))
             {
                 // Ask player if he wants to engage or not
-                Console.WriteLine($"Do you want to engage? ({accept}/{deny})");
+                AlwaysPrintTopHeader(playerName, ParseElementToReadable(playerElement), playerHP, currentMessage,  roundsSurvived + 1);
                 playerInput = Console.ReadLine();
 
                 if (playerInput == null || (playerInput != accept && playerInput != deny))
                     Console.WriteLine("Invalid input. Please try again");
             }
-
-            PrintFullDottedLine();
             
             if (playerInput == accept)
-            {
-                Console.WriteLine($"Round {roundsSurvived + 1}");
-                Console.WriteLine("You chose to engage the obstacle");
-                Console.WriteLine($"Your element: {playerElement}");
-                Console.WriteLine($"{randomObstacleType} element: {randomObstacleElement}");
+            {     
+                currentMessage =                     
+                    "You chose to engage the obstacle\n" +
+                    "---\n" +
+                    $"Your element: {playerElement}\n" +
+                    $"{randomObstacleType} element: {randomObstacleElement}\n" +
+                    "---\n";
+                AlwaysPrintTopHeader(playerName, ParseElementToReadable(playerElement), playerHP, currentMessage,  roundsSurvived + 1);
                 RunAnimationSpinner("Engaging");
-                PrintFullDottedLine();
 
                 Entity encounterWinner = GetWinner(playerElement, randomObstacleElement);
                 if (encounterWinner != Entity.None)
                 {
-                    Console.WriteLine($"{encounterWinner} wins");
+                    currentMessage += $"{encounterWinner} wins\n\n";                    
                     if (encounterWinner == Entity.Obstacle)
                     {
                         isGameOver = true;
@@ -90,43 +103,66 @@ public class DailyEx012FlappyElementalSurvivalRun
                     else
                     {
                         roundsSurvived++;
-                        Console.WriteLine("Round survived");                        
+                        currentMessage += $"Round survived";                        
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Draw!");
-                    Console.WriteLine($"You lost your {playerElement} element");                    
+                    currentMessage += 
+                        $"Draw!\n\n" +
+                        $"You lost your {playerElement} element\n\n" +
+                        $"Round survived";
+                    
                     roundsSurvived++;
-                    Console.WriteLine("Round survived");
                     playerElement = AssignNoneElement();                    
                 }
             }
             else
             {
                 RunAnimationSpinner();
-
-                PrintFullDottedLine();
-                Console.WriteLine("You chose to dodge the obstacle. You lose 1 HP");                
+                currentMessage = 
+                    "You chose to dodge the obstacle. You lose 1 HP\n\n" +
+                    "Round survived";
                 roundsSurvived++;
-                Console.WriteLine("Round survived");
                 playerHP -= 1;
-                Console.WriteLine($"Your current HP is {playerHP}");
-                PrintFullDottedLine();
             }
 
-            PrintFullDottedLine();
-
             if (playerHP <= 0)
-                isGameOver = true;
+            {
+                isGameOver = true;    
+            }
+            else
+            {
+                currentMessage += "\n\nPress any key to continue";
+                AlwaysPrintTopHeader(playerName, ParseElementToReadable(playerElement), playerHP, currentMessage, roundsSurvived + 1);
+                playerInput = Console.ReadLine();
+            }
+            
 
         } while (!isGameOver);
 
         if (isGameOver)
-        {
-            Console.WriteLine("GAME OVER");
-            Console.WriteLine($"Total rounds survived: {roundsSurvived}");   
+        {            
+            currentMessage = 
+                "\nGAME OVER\n\n" +
+                $"Total rounds survived: {roundsSurvived}";
+            AlwaysPrintTopHeader(playerName, ParseElementToReadable(playerElement), playerHP, currentMessage, roundsSurvived + 1);
         }            
+    }
+
+    private void AlwaysPrintTopHeader(string playerName, string playerElement, int playerHP, string message, int roundsSurvived)
+    {
+        Console.Clear();
+        int padTopInfo = 10;
+        Console.WriteLine("--------------------------------------------------------");
+        Console.WriteLine(
+            $"{playerName.PadRight(padTopInfo)}|" +
+            $"Element: {playerElement.ToString().PadRight(padTopInfo)}|" +
+            $"HP: {playerHP.ToString().PadRight(padTopInfo)} |" +
+            $"Round: {roundsSurvived}");
+        Console.WriteLine("--------------------------------------------------------");
+        Console.WriteLine(message);
+        Console.WriteLine("--------------------------------------------------------");
     }
 
     private Random rng = new();
@@ -135,7 +171,9 @@ public class DailyEx012FlappyElementalSurvivalRun
     public void RunApp()
     {
         Console.Clear();
-        Console.WriteLine("FLAPPY ELEMENTAL - SURVIVAL RUN");
+        Console.WriteLine("--------------------------------------------------------");
+        Console.WriteLine("FLAPPY ELEMENTAL - SURVIVAL RUN".PadLeft(45));
+        Console.WriteLine("--------------------------------------------------------");
         RunAnimationSpinner();
         BeginRun();
     }
@@ -296,11 +334,6 @@ public class DailyEx012FlappyElementalSurvivalRun
     private void Delay(int delay = 100)
     {
         Thread.Sleep(delay);
-    }
-
-    private void PrintFullDottedLine()
-    {
-        Console.WriteLine("--------------------");
     }
 
     private void PrintEmptyLine()
