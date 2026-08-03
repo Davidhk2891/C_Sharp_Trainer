@@ -6,8 +6,8 @@ Setup:
     - Player types the name at the start
     - Player gets a random element
     - Each round: Random obstacle with random element appears
-    - Player grabs a chip or skipsm then engages or dodges
-    - 5 HP. Game ends at 0
+    - Player grabs a chip or skips then engages or dodges
+    - 20 HP. Game ends at 0
 Rules:
     - Use Element and FightOutcome enums. Build GetWinner() from memory
     - Validate all input with int.TryParse()
@@ -19,17 +19,20 @@ Rules:
     - Player name in all caps using ToUpper()
 */
 using System.Diagnostics.Metrics;
+using System.Runtime.CompilerServices;
 
 public class DailyEx013FlappyElementalSurvivalRunV2
 {
     private Random rng = new();
+    private String? playerName = "";
+    Element playerElement;
+    int playerHealth = 20;
+    int playerCoins = 0;
+    int currentRound = 1;
     public void RunApp()
     {
-        Console.Clear();
-        DrawLine();
-        Console.WriteLine("DailyEx013FlappyelementalSurvivalRun V2");
-        DrawLine();
-        BeginRun();
+        UIGameIntro();
+        BeginCoreLoop();
     }
 
     private enum Element
@@ -40,6 +43,15 @@ public class DailyEx013FlappyElementalSurvivalRunV2
         None
     }
 
+    private enum Obstacle
+    {
+        Column,
+        Wall,
+        Bat,
+        Skull,
+        Trap        
+    }
+
     private enum FightOutcome
     {
         Player,
@@ -47,22 +59,205 @@ public class DailyEx013FlappyElementalSurvivalRunV2
         Draw
     }
 
-    private void BeginRun()
+    private void BeginCoreLoop()
     {
-        AnimationSpinner("Loading", 10);
-        // string? playerInput = "";
-        // do
-        // {
-        //     Console.WriteLine("Enter your name:");
-        //     playerInput = Console.ReadLine();
-        //     if (playerInput == null || playerInput == "")
-        //         Console.WriteLine("Name cannot be empty");
-    
+        string stackedGameMessage = "";
+
+        playerElement = GetElementNone();
+
+        Element obstacleElement;
+        Obstacle currentObstacle;
+
+        bool isGameOver = false;
+
+        EnterName();
+
+        do
+        {
+            string? playerInput;
+            stackedGameMessage = "Get new element?";
+            stackedGameMessage += "\n\n1 - Yes\n2 - No";
+            UIGameLoop(stackedGameMessage);
+            do
+            {
+                playerInput = Console.ReadLine();
+                if (playerInput != "1" && playerInput != "2")
+                {
+                    stackedGameMessage += "\n\nPlease enter a valid input";
+                    UIGameLoop(stackedGameMessage);
+                }
+            } while (playerInput != "1" && playerInput != "2");
+
+            if (playerInput == "1")
+                playerElement = GetRandomElement();
+        
+            currentObstacle = GetRandomObstacle();
+            obstacleElement = GetRandomElement();
+
+            stackedGameMessage = $"A {currentObstacle} of type {obstacleElement} approaches you.";
+            stackedGameMessage += "\n\n1 - Engage\n2 - Flee";
+            UIGameLoop(stackedGameMessage);
+
+            do
+            {
+                playerInput = Console.ReadLine();
             
-        // } while (playerInput == null || playerInput == "");
+                if (playerInput != "1" && playerInput != "2")
+                                    
+                    stackedGameMessage += "\n\nPlease enter a valid input";
+                    UIGameLoop(stackedGameMessage);
+                
+            } while (playerInput != "1" && playerInput != "2");
+
+            if (playerInput == "1")
+            {
+                stackedGameMessage = "You've choosen to fight";
+                
+                AnimationSpinner("Engaging...");
+
+                FightOutcome fightOutcome = GetWinner(playerElement, obstacleElement);
+
+                stackedGameMessage += $"\n\nPlayer's element: {playerElement}";
+                stackedGameMessage += "\n-------------";
+                stackedGameMessage += $"\nObstacle: {currentObstacle}";
+                stackedGameMessage += $"\nObatacle's element: {obstacleElement}";
+                stackedGameMessage += "\n-------------";
+                stackedGameMessage += $"\nWINNER: {fightOutcome}";
+
+                if (fightOutcome == FightOutcome.Player)
+                {
+                    playerCoins += 1;
+                    playerHealth += 2;
+                    currentRound++;
+                }
+                else if (fightOutcome == FightOutcome.Obstacle)
+                {
+                    playerHealth = 0;
+                    isGameOver = true;
+                }
+                else if (fightOutcome == FightOutcome.Draw)
+                {
+                    playerHealth -= 5;
+                    if (playerHealth < 0)
+                        playerHealth = 0;
+
+                    currentRound++;
+                    playerElement = GetElementNone();
+                    stackedGameMessage += "\n\nYou've lost your element";
+                }
+
+                if (playerHealth <= 0)
+                {
+                    isGameOver = true;
+                    stackedGameMessage += "\n\nYOU DIED";   
+                }
+                UIGameLoop(stackedGameMessage);
+            }
+            else if (playerInput == "2")
+            {
+                currentRound++;
+                playerHealth -= 5;
+                stackedGameMessage = "You've choosen to flee";
+                stackedGameMessage += "You've lost 5hp";
+
+                if (playerHealth <= 0)
+                {
+                    isGameOver = true;
+                    stackedGameMessage += "\n\nYOU DIED";   
+                }
+
+                UIGameLoop(stackedGameMessage);
+            }
+
+            playerInput = Console.ReadLine();
+
+        } while (!isGameOver);
     }
 
-    private Element AssignElementNone()
+    private String ParseElementToString(Element element)
+    {
+        string stringElement = "";
+        switch (element)
+        {
+            case Element.Fire:
+                stringElement = "Fire";
+                break;
+            case Element.Water:
+                stringElement = "Water";
+                break;
+            case Element.Ice:
+                stringElement = "Ice";
+                break;
+            case Element.None:
+                stringElement = "None";
+                break;
+        }
+        return stringElement;
+    }
+
+    private String ParseObstacleToString(Obstacle obstacle)
+    {
+        string stringObstacle = "";
+        switch (obstacle)
+        {
+            case Obstacle.Column:
+                stringObstacle = "Column";
+                break;
+            case Obstacle.Wall:
+                stringObstacle = "Wall";
+                break;
+            case Obstacle.Bat:
+                stringObstacle = "Bat";
+                break;
+            case Obstacle.Skull:
+                stringObstacle = "Skull";
+                break;
+            case Obstacle.Trap:
+                stringObstacle = "Trap";
+                break;
+        }
+        return stringObstacle;
+    }
+
+    private Obstacle GetRandomObstacle()
+    {
+        Obstacle randomObstacle = Obstacle.Column;
+        int randomNum = rng.Next(1, 6);
+        switch (randomNum)
+        {
+            case 1:
+                randomObstacle = Obstacle.Column;
+                break;
+            case 2:
+                randomObstacle = Obstacle.Wall;
+                break;
+            case 3:
+                randomObstacle = Obstacle.Bat;
+                break;
+            case 4:
+                randomObstacle = Obstacle.Skull;
+                break;                
+            case 5:
+                randomObstacle = Obstacle.Trap;
+                break;
+        }
+        return randomObstacle;
+    }
+
+    private void EnterName()
+    {
+        AnimationSpinner("Loading", 10);
+        playerName = "";
+        do
+        {
+            Console.WriteLine("Enter your name:");
+            playerName = Console.ReadLine()?.ToUpper();
+            if (playerName == null || playerName == "")
+                Console.WriteLine("Name cannot be empty");        
+        } while (playerName == null || playerName == "");
+    }
+
+    private Element GetElementNone()
     {
         return Element.None;
     }
@@ -123,6 +318,10 @@ public class DailyEx013FlappyElementalSurvivalRunV2
                 fightOutcome = FightOutcome.Obstacle;
             }
         }
+        else
+        {
+            fightOutcome = FightOutcome.Obstacle;
+        }
         return fightOutcome;
     }
 
@@ -150,6 +349,50 @@ public class DailyEx013FlappyElementalSurvivalRunV2
 
     private void DrawLine()
     {
-        Console.WriteLine("---------------------------------------");
+        Console.WriteLine("-------------------------------------------------------------------------");
+    }
+
+    private void PrintText(String text)
+    {
+        Console.WriteLine(text);
+    }
+
+    private void UIEmptyLine()
+    {
+        PrintText("\n");
+    }
+
+    private void ClearScreen()
+    {
+        Console.Clear();
+    }
+
+    private void UIGameIntro()
+    {
+        ClearScreen();
+        DrawLine();
+        string title = "FLAPPY ELEMENTAL - SURVIVAL RUN V2";
+        PrintText(title.PadLeft(title.Length + 20));
+        DrawLine();
+    }
+
+    private void UIGameLoop(String message = "")
+    {
+        ClearScreen();
+        DrawLine();
+        string stackedGameUI = "";
+        int UIDefinedPadding = 15;
+        if (playerName != null)
+            {
+                stackedGameUI = $"PLAYER: {playerName} ".PadRight(UIDefinedPadding);
+                stackedGameUI += $"| ELEMENT: {ParseElementToString(playerElement)} ".PadRight(UIDefinedPadding);
+                stackedGameUI += $"| HEALTH: {playerHealth}".PadRight(UIDefinedPadding);
+                stackedGameUI += $"| COINS: {playerCoins}".PadRight(UIDefinedPadding);
+                stackedGameUI += $"| ROUND: {currentRound}".PadRight(UIDefinedPadding);  
+            }
+        PrintText(stackedGameUI);
+        DrawLine();
+        UIEmptyLine();
+        PrintText(message);
     }
 }

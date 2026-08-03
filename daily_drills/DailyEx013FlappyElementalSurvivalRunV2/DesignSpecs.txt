@@ -17,4 +17,23 @@ Rules:
         rapidly before settling)
     - Use ternary at least once for result formatting
     - Player name in all caps using ToUpper()
+
+Core game loop algo design:
+
+    - Select a random obstacle out of 5: column, wall, bat, skull, trap
+    - Select a random element for that enemy
+    - Alert player of incoming threat. Ask to engage or flee
+        - If engage, initiate RPS battle
+            - If win
+                - gain 1 coin
+                - gain 2 HP
+            If lose
+                - Game over
+            If tie
+                - Lose your element -> None
+        - If fleeing
+            - Lose 5 hp
+    - Update UI and give message of duel outcome
+    - Repeat
+        
 */
