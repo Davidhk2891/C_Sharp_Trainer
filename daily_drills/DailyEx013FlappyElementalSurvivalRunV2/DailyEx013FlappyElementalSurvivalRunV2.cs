@@ -382,7 +382,7 @@ public class DailyEx013FlappyElementalSurvivalRunV2
         DrawLine();
         string stackedGameUI = "";
         int UIDefinedPadding = 15;
-        if (playerName != null)
+        if (playerName != null) 
             {
                 stackedGameUI = $"PLAYER: {playerName} ".PadRight(UIDefinedPadding);
                 stackedGameUI += $"| ELEMENT: {ParseElementToString(playerElement)} ".PadRight(UIDefinedPadding);
