@@ -23,6 +23,10 @@ public class DailyEx014FlappyElementalQuickduelV1
 {
     // GAME BALANCER
     private static int INITIAL_PLAYER_LIFE = 100;
+    
+    // GAME VALUES (forgot the name of this thing)
+    private static int UI_PAD_RIGHT = 6;
+
     // RNG
     private Random globalRNG = new Random();
 
@@ -45,6 +49,7 @@ public class DailyEx014FlappyElementalQuickduelV1
     private Enemy randomComputerEnemy = Enemy.Pipe;
 
     // MATCH
+    private int roundsSurvived = 0;
     private Boolean isGameOver = false;
 
     private enum Element
@@ -80,8 +85,8 @@ public class DailyEx014FlappyElementalQuickduelV1
     private void RunGameIntro()
     {
         RunSpinAnimation();
-        string line = "--------------------------------------";
-        string title = "  FLAPPY ELEMENTAL - QUICK DUEL V1.0";
+        string line = DrawLine();
+        string title = "\t  FLAPPY ELEMENTAL - QUICK DUEL V1.0";
         string intro = $"{line}";
         intro += $"\n{title}";
         intro += $"\n{line}";
@@ -95,7 +100,7 @@ public class DailyEx014FlappyElementalQuickduelV1
         do
         {
             UIprompt = "Enter your name:";
-            Write(UIprompt);
+            WriteWithUI(UIprompt);
             playerInput = Console.ReadLine();
 
             if (playerInput != null)
@@ -105,7 +110,7 @@ public class DailyEx014FlappyElementalQuickduelV1
 
         } while (playerInput == null);
         playerInput = null;
-        Write($"NAME: {playerName}");
+        WriteWithUI();
 
         do
         {            
@@ -123,7 +128,7 @@ public class DailyEx014FlappyElementalQuickduelV1
                 }
                 else
                 {
-                    Write("You must select a valid option");
+                    WriteWithUI("You must select a valid option");
                 }            
             } while (playerInput == "" || (playerInput != "y" && playerInput != "n"));
 
@@ -136,7 +141,7 @@ public class DailyEx014FlappyElementalQuickduelV1
             {
                 UIprompt =$"You've chosen no element.";
             }
-            Write(UIprompt);
+            WriteWithUI(UIprompt);
 
             // 3. Notify player that random obstacle with random element appeared
             randomComputerEnemy = GetRandomEnemy();
@@ -156,7 +161,7 @@ public class DailyEx014FlappyElementalQuickduelV1
                 }
                 else
                 {
-                    Write("You must select a valid option");
+                    WriteWithUI("You must select a valid option");
                 }
             } while (playerInput == null || (playerInput != "y" && playerInput != "n"));
 
@@ -169,6 +174,7 @@ public class DailyEx014FlappyElementalQuickduelV1
                 {
                     UIprompt = $"{DuelOutcome.Player} WINS!";    
                     UIprompt += "\n\nENEMY FELLED";
+                    roundsSurvived += 1;
                 }
                 else if (matchResult == DuelOutcome.Computer)
                 {
@@ -181,16 +187,18 @@ public class DailyEx014FlappyElementalQuickduelV1
                     randomPlayerElement = Element.None;
                     UIprompt = $"{DuelOutcome.Tie}.";
                     UIprompt += "\n\nYOU LOST YOUR ELEMENT";
+                    roundsSurvived += 1;
                 }
-                Write(UIprompt);
+                WriteWithUI(UIprompt);
             }
             else
             {
                 // Flee
                 UIprompt = "You've chosen to flee the encounter.";
                 UIprompt = "You've lost 20 HP.";
-                playerLife -= 20;                
-                Write(UIprompt);
+                playerLife -= 20;
+                roundsSurvived += 1;                
+                WriteWithUI(UIprompt);
             }
 
             if (isGameOver == false)
@@ -297,6 +305,21 @@ public class DailyEx014FlappyElementalQuickduelV1
         Console.Clear();
     }
 
+    private void WriteWithUI(string message = "")
+    {
+        string topUI = 
+            $"{DrawLine()}\n" +
+            $"NAME: {playerName.ToUpper().PadRight(UI_PAD_RIGHT)} |" + 
+            $"ELEMENT: {randomPlayerElement.ToString().PadRight(UI_PAD_RIGHT)} |" +
+            $"HP: {playerLife.ToString().PadRight(UI_PAD_RIGHT)} |" +
+            $"ROUND: {roundsSurvived + 1}\n" +
+            $"{DrawLine()}\n";
+
+        Console.Clear();
+        Console.WriteLine(topUI);
+        Console.WriteLine(message);
+    }
+
     private void Write(string message)
     {
         Console.Clear();
@@ -306,5 +329,10 @@ public class DailyEx014FlappyElementalQuickduelV1
     private void ClearScreen()
     {
         Console.Clear();
+    }
+
+    private string DrawLine()
+    {
+        return "-------------------------------------------------------";
     }
 }
