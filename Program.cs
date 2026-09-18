@@ -1,7 +1,4 @@
 ﻿// Run program
+DailyEx014FlappyElementalQuickduelV1 dailyEx014FlappyElementalQuickduelV1 = new();
+dailyEx014FlappyElementalQuickduelV1.StartGame();
 
-// Exercise program
-// Cg14Exercise3.Run();
-
-// Small console app
-ShortRefEx002ArenaDiceDuel.RunApp();

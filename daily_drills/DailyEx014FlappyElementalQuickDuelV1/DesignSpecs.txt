@@ -1,0 +1,21 @@
+🧊🔥💧 Flappy Elemental — Quick Duel
+
+Premise:
+You're mid-flight. An obstacle appears. One round, one choice, one outcome. Simple and fast.
+
+Setup:
+
+Player enters their name
+Player picks a starting element (1-Fire, 2-Water, 3-Ice)
+One obstacle appears with a random element
+Player engages or flees
+Print the outcome
+
+Rules:
+
+Element enum and GetWinner() from memory
+Validate all input with int.TryParse()
+Player name in all caps with ToUpper()
+HUD line formatted with PadRight() — name, element, HP side by side
+Use a ternary for the outcome message
+One round, then game over — print result with String.Join() building a two-line summary
